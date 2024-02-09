@@ -25,7 +25,7 @@ def parse_opt():
     )
     parser.add_argument(
         '-m', '--model', 
-        default=mobilenet,
+        default='mobilenet',
         choices=['mobilenet', 'mobilenetv2'],
         help='Выбор модели'
     )
