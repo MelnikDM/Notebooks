@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import glob as glob
 import numpy as np
 import argparse
+import yaml
+import os
 
 # Создаем парсер
 
@@ -60,7 +62,7 @@ def collect_all_images(dir_test):
 
 
 image_paths = glob.glob('input/*')
-print(f"Found {len(image_paths)} images...")
+print(f"Найдено {len(image_paths)} изображений...")
 
 
 def main(args):
@@ -85,37 +87,38 @@ def main(args):
     # Определение пути до OUTPUT
     if args['output'] == None:
         DIR_OUTPUT = data_configs['DIR_OUTPUT']
+        if not os.path.exists(DIR_OUTPUT):
+        os.makedirs(DIR_OUTPUT)
     else:
         DIR_OUTPUT = args['output']
      
 
     for i, input_image in enumerate(input_images):
-        print(f"Processing and classifying on {input_image.split('/')[-1]}")
-        # read image using matplotlib to keep an original RGB copy
+        print(f"Процессинг и классификация файла - {input_image.split('/')[-1]}")
+        # Читаем изображение
         orig_image = plt.imread(input_image)
-        # read and resize the image
+        # Приводим его в требуемый для imagenet формат и размер
         image = tf.keras.preprocessing.image.load_img(input_image, 
             target_size=(224, 224))
-        # add batch dimension
         image = np.expand_dims(image, axis=0)
         # preprocess the image using TensorFlow utils
         image = tf.keras.applications.imagenet_utils.preprocess_input(image)
 
-        # load the model
+        # Загрузка модели
         model = models_dict[args['model']]
-        # forward pass through the model to get the predictions
+        # Прогоняем через модель изображения
         predictions = model.predict(image)
         processed_preds = tf.keras.applications.imagenet_utils.decode_predictions(
             preds=predictions
         )
-        # print(f"Original predictions: {predictions}")
-        print(f"Processed predictions: {processed_preds}")
+        
+        print(f"Результаты прогноза модели: {processed_preds}")
         print('-'*50)
         
-        # create subplot of all images
-        plt.subplot(2, 2, i+1)
+        # Отобажаем результаты модели
+        plt.subplot(5, 5, i+1)
         plt.imshow(orig_image)
-        plt.title(f"{processed_preds[0][0][1]}, {processed_preds[0][0][2] *100:.3f}")
+        plt.title(f"{processed_preds[0][0][1]}, {processed_preds[0][0][2] *50:.3f}")
         plt.axis('off')
 
     plt.savefig(f"{DIR_OUTPUT}/{args['model']}_output.png")
