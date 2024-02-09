@@ -61,8 +61,8 @@ def collect_all_images(dir_test):
     return test_images 
 
 
-image_paths = glob.glob('input/*')
-print(f"Найдено {len(image_paths)} изображений...")
+# image_paths = glob.glob('input/*')
+# print(f"Найдено {len(image_paths)} изображений...")
 
 
 def main(args):
@@ -95,18 +95,13 @@ def main(args):
 
     for i, input_image in enumerate(input_images):
         print(f"Процессинг и классификация файла - {input_image.split('/')[-1]}")
-        # Читаем изображение
         orig_image = plt.imread(input_image)
-        # Приводим его в требуемый для imagenet формат и размер
-        image = tf.keras.preprocessing.image.load_img(input_image, 
-            target_size=(224, 224))
+        image = tf.keras.preprocessing.image.load_img(input_image, target_size=(224, 224))
         image = np.expand_dims(image, axis=0)
-        # preprocess the image using TensorFlow utils
         image = tf.keras.applications.imagenet_utils.preprocess_input(image)
 
         # Загрузка модели
         model = models_dict[args['model']]
-        # Прогоняем через модель изображения
         predictions = model.predict(image)
         processed_preds = tf.keras.applications.imagenet_utils.decode_predictions(
             preds=predictions
@@ -118,7 +113,7 @@ def main(args):
         # Отобажаем результаты модели
         plt.subplot(5, 5, i+1)
         plt.imshow(orig_image)
-        plt.title(f"{processed_preds[0][0][1]}, {processed_preds[0][0][2] *50:.3f}")
+        plt.title(f"{processed_preds[0][0][1]}, {processed_preds[0][0][2] *100:.3f}", fontsize = 6)
         plt.axis('off')
 
     plt.savefig(f"{DIR_OUTPUT}/{args['model']}_output.png")
