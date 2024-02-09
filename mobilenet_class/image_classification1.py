@@ -19,7 +19,7 @@ def parse_opt():
         help='путь к данным',
     )
     parser.add_argument(
-        'o', '--output', 
+        '-o', '--output', 
         default=None,
         help='путь к результатам модели'
     )
