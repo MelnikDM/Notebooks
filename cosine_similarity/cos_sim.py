@@ -63,7 +63,6 @@ def collect_all_images(dir_test):
     return test_images 
 
 
-
 def process_all_image(test_images):
     """
     Данная функция отвечает за препроцессинг входных данных. Во время предварительной обработки
@@ -83,6 +82,7 @@ def process_all_image(test_images):
     
     return img_dict
 
+
 def main(args):
 
     np.random.seed(42)
@@ -101,6 +101,7 @@ def main(args):
         DIR_INPUT = args['input']
         input_images = collect_all_images(DIR_INPUT)
     print(f"Количество изображений: {len(input_images)}")
+    print()
 
     # Определение пути до OUTPUT
     if args['output'] == None:
@@ -110,31 +111,30 @@ def main(args):
     else:
         DIR_OUTPUT = args['output']
 
-
+    # Препроцессинг изображений
     img_dict = process_all_image(input_images)
 
-    mobilenetv2_model = MobileNetV2(include_top = False, weights = 'imagenet')
-
-    
-   
-    #initialize the matrix (62720)
+    # Инициализация модели
+    mobilenetv2_model = MobileNetV2(include_top = False, weights = 'imagenet')    
     images_matrix = np.zeros([len(img_dict.values()), 62720])
     for i, (num, image) in enumerate(img_dict.items()):
         images_matrix[i, :] = mobilenetv2_model.predict(image).ravel()
 
-    
+    # Расчет косинусного расстояния
     cos_similarity = cosine_similarity(images_matrix)
 
+    # Записываем результаты в файл
     cosine_dataframe = pd.DataFrame(cos_similarity)
-    print(cosine_dataframe)
-    print("Shape of the cosine dataframe is:", cosine_dataframe.shape)
+    cosine_dataframe.to_csv(f'{DIR_OUTPUT}/cosine_dataframe.csv', sep='\t')
     print()
+    print(f"Результаты сохранены в {DIR_OUTPUT}")
     print()
+    
 
     product_info = cosine_dataframe.iloc[6].values
     similar_images_index = np.argsort(-product_info)[:3]
-    print("Index of similar images are:", similar_images_index)
-    print(sorted(-product_info)[: 3])
+    print("Индексы схожих изображений:", similar_images_index)
+    print("Косинусные расстояния:", sorted(-product_info)[: 3])
 
     image_path = glob(f"{DIR_INPUT}/*.jpg")
 
