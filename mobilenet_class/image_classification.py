@@ -44,12 +44,12 @@ models_dict = {
 
 def collect_all_images(dir_test):
     """
-    Function to return a list of image paths.
+    Данная функция возвращает список путей до изображений.
 
-    :param dir_test: Directory containing images or single image path.
+    :param dir_test: папка с изображениями.
 
     Returns:
-        test_images: List containing all image paths.
+        test_images: Список с путями.
     """
     test_images = []
     if os.path.isdir(dir_test):
@@ -88,7 +88,7 @@ def main(args):
     if args['output'] == None:
         DIR_OUTPUT = data_configs['DIR_OUTPUT']
         if not os.path.exists(DIR_OUTPUT):
-        os.makedirs(DIR_OUTPUT)
+            os.makedirs(DIR_OUTPUT)
     else:
         DIR_OUTPUT = args['output']
      

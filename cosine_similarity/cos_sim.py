@@ -146,8 +146,10 @@ def main(args):
     for i, image in enumerate(img_list):
         img = cv2.imread(img_list[i])
 
-        plt.subplot(5, 5, i+1)
+        plt.subplot(1, 3, i+1)
         plt.imshow(img)
+        plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.4)
+        plt.title(i)
 
     plt.savefig(f"{DIR_OUTPUT}/output.png")
     plt.show()
