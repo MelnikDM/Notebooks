@@ -132,8 +132,6 @@ def main(args):
     
     a = int(input("Введите номер изображения: "))
     print()
-    b = int(input("Введите количество схожих изображений: "))
-    print()
     product_info = cosine_dataframe.iloc[a].values
     similar_images_index = np.argsort(-product_info)[:b]
     print("Индексы схожих изображений:", similar_images_index)
