@@ -130,11 +130,14 @@ def main(args):
     print(f"Результаты сохранены в {DIR_OUTPUT}")
     print()
     
-    a = int(input("Выберите номер изображения: "))
+    a = int(input("Введите номер изображения: "))
+    print()
+    b = int(input("Введите количество схожих изображений: "))
+    print()
     product_info = cosine_dataframe.iloc[a].values
-    similar_images_index = np.argsort(-product_info)[:3]
+    similar_images_index = np.argsort(-product_info)[:b]
     print("Индексы схожих изображений:", similar_images_index)
-    print("Косинусные расстояния:", sorted(-product_info)[: 3])
+    print("Косинусные расстояния:", sorted(-product_info)[:b])
 
     image_path = glob(f"{DIR_INPUT}/*.jpg")
 
@@ -143,7 +146,7 @@ def main(args):
     for i, image in enumerate(img_list):
         img = cv2.imread(img_list[i])
 
-        plt.subplot(2, 3, i+1)
+        plt.subplot(5, 5, i+1)
         plt.imshow(img)
 
     plt.savefig(f"{DIR_OUTPUT}/output.png")
