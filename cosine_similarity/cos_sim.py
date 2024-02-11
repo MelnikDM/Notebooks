@@ -16,6 +16,8 @@ import matplotlib.image as mpimg
 
 from glob import glob
 
+img_dict = dict()
+
 def parse_opt():
         
     parser = argparse.ArgumentParser()
@@ -38,15 +40,38 @@ def parse_opt():
     return args
 
 
-def process_all_image(DIR_INPUT):
+
+
+def collect_all_images(dir_test):
+    """
+    Function to return a list of image paths.
+
+    :param dir_test: Directory containing images or single image path.
+
+    Returns:
+        test_images: List containing all image paths.
+    """
+    test_images = []
+    if os.path.isdir(dir_test):
+        image_file_types = ['*.jpg', '*.jpeg', '*.png', '*.ppm']
+        for file_type in image_file_types:
+            test_images.extend(glob.glob(f"{dir_test}/{file_type}"))
+    else:
+        test_images.append(dir_test)
+    return test_images 
+
+
+
+def process_all_image(test_images):
 
     """ Препроцессинг входных данных"""
 
-    for mix_image in glob("DIR_INPUT/*.jpg"):
-    image = kimage.load_img(mix_image, target_size = (224,224))
-    image = preprocess_input(np.expand_dims(kimage.img_to_array(image), axis = 0))
-    num = mix_image.split('/')[-1].split('.')[0]
-    img_dict[num] = image
+    for mix_image in test_images:
+        image = kimage.load_img(mix_image, target_size = (224,224))
+        image = preprocess_input(np.expand_dims(kimage.img_to_array(image), axis = 0))
+        num = mix_image.split('/')[-1].split('.')[0]
+        img_dict[num] = image
+    
     return img_dict
 
 def main(args):
@@ -72,13 +97,12 @@ def main(args):
     if args['output'] == None:
         DIR_OUTPUT = data_configs['DIR_OUTPUT']
         if not os.path.exists(DIR_OUTPUT):
-        os.makedirs(DIR_OUTPUT)
+            os.makedirs(DIR_OUTPUT)
     else:
         DIR_OUTPUT = args['output']
 
 
-    img_dict = dict()
-    img_dict = process_all_image(DIR_INPUT)
+    img_dict = process_all_image(test_images)
 
     mobilenetv2_model = MobileNetV2(include_top = False, weights = 'imagenet')
 
@@ -103,7 +127,7 @@ def main(args):
     print("Index of similar images are:", similar_images_index)
     print(sorted(-product_info)[: 3])
 
-    image_path = glob("DIR_INPUT/*.jpg")
+    image_path = glob(f"{DIR_INPUT}/*.jpg")
 
     img_list = [image_path[similar_images_index[0]], image_path[similar_images_index[1]], image_path[similar_images_index[2]]]
 
@@ -114,7 +138,10 @@ def main(args):
         plt.imshow(img)
 
     plt.show()
+    plt.savefig(f"{DIR_OUTPUT}/output.png")
+    plt.close()
 
 
 if __name__ == '__main__':
-    main()
+    args = parse_opt()
+    main(args)
