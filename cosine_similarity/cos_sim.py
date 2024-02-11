@@ -130,8 +130,8 @@ def main(args):
     print(f"Результаты сохранены в {DIR_OUTPUT}")
     print()
     
-
-    product_info = cosine_dataframe.iloc[6].values
+    a = int(input("Выберите номер изображения: "))
+    product_info = cosine_dataframe.iloc[a].values
     similar_images_index = np.argsort(-product_info)[:3]
     print("Индексы схожих изображений:", similar_images_index)
     print("Косинусные расстояния:", sorted(-product_info)[: 3])
