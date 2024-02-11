@@ -1,0 +1,4 @@
+# Images directory 
+DIR_INPUT: '/content/Notebooks/cosine_similarity/input'
+DIR_OUTPUT: '/content/Notebooks/cosine_similarity/output'
+
