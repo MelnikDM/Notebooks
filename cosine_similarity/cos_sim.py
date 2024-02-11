@@ -18,6 +18,8 @@ from glob import glob
 
 img_dict = dict()
 
+# Создаем парсер
+
 def parse_opt():
         
     parser = argparse.ArgumentParser()
@@ -40,22 +42,22 @@ def parse_opt():
     return args
 
 
-
+# Создаем загрузчик изображений
 
 def collect_all_images(dir_test):
     """
-    Function to return a list of image paths.
+    Данная функция возвращает список путей до изображений.
 
-    :param dir_test: Directory containing images or single image path.
+    :param dir_test: папка с изображениями.
 
     Returns:
-        test_images: List containing all image paths.
+        test_images: Список с путями.
     """
     test_images = []
     if os.path.isdir(dir_test):
         image_file_types = ['*.jpg', '*.jpeg', '*.png', '*.ppm']
         for file_type in image_file_types:
-            test_images.extend(glob.glob(f"{dir_test}/{file_type}"))
+            test_images.extend(glob(f"{dir_test}/{file_type}"))
     else:
         test_images.append(dir_test)
     return test_images 
@@ -63,9 +65,16 @@ def collect_all_images(dir_test):
 
 
 def process_all_image(test_images):
-
-    """ Препроцессинг входных данных"""
-
+    """
+    Данная функция отвечает за препроцессинг входных данных. Во время предварительной обработки
+    размер изображения изменяется, а значения пикселей нормализуются до диапазона [-1, 1]/
+    
+    :param test_images: изображения, которые необходимо обработать.
+    
+    Returns:
+        img_dict: Словарь следующей структуры: {№ изображения: тензор}.
+    
+    """
     for mix_image in test_images:
         image = kimage.load_img(mix_image, target_size = (224,224))
         image = preprocess_input(np.expand_dims(kimage.img_to_array(image), axis = 0))
@@ -102,7 +111,7 @@ def main(args):
         DIR_OUTPUT = args['output']
 
 
-    img_dict = process_all_image(test_images)
+    img_dict = process_all_image(input_images)
 
     mobilenetv2_model = MobileNetV2(include_top = False, weights = 'imagenet')
 
@@ -137,8 +146,8 @@ def main(args):
         plt.subplot(2, 3, i+1)
         plt.imshow(img)
 
-    plt.show()
     plt.savefig(f"{DIR_OUTPUT}/output.png")
+    plt.show()
     plt.close()
 
 
