@@ -133,9 +133,9 @@ def main(args):
     a = int(input("Введите номер изображения: "))
     print()
     product_info = cosine_dataframe.iloc[a].values
-    similar_images_index = np.argsort(-product_info)[:b]
+    similar_images_index = np.argsort(-product_info)[:3]
     print("Индексы схожих изображений:", similar_images_index)
-    print("Косинусные расстояния:", sorted(-product_info)[:b])
+    print("Косинусные расстояния:", sorted(-product_info)[:3])
 
     image_path = glob(f"{DIR_INPUT}/*.jpg")
 
