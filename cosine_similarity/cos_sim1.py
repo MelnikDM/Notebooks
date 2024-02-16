@@ -10,6 +10,8 @@ from keras.applications import MobileNetV2
 from keras.applications.mobilenet import preprocess_input
 from sklearn.metrics.pairwise import cosine_similarity
 from towhee import AutoPipes
+from PIL import Image
+from random import randint
 
 import cv2
 import matplotlib.pyplot as plt
@@ -102,9 +104,9 @@ def plot_similar(df, embedding_col, query_index, k_neighbors=3):
     # Calculate pairwise cosine similarities between query and all rows
     cos_similarity = cosine_similarity([df[embedding_col][query_index]], df[embedding_col].values.tolist())[0]
     cosine_dataframe = pd.DataFrame(cos_similarity)
-    cosine_dataframe.to_csv(f'{DIR_OUTPUT}/cosine_dataframe.csv', sep='\t')
+    cosine_dataframe.to_csv(f'/content/Notebooks/cosine_similarity/output/cosine_dataframe.csv', sep=';')
     print()
-    print(f"Результаты сохранены в {DIR_OUTPUT}")
+    # print(f"Результаты сохранены в {DIR_OUTPUT}")
     print()
 
 
@@ -126,6 +128,9 @@ def plot_similar(df, embedding_col, query_index, k_neighbors=3):
         img = Image.open(df['img_path'][image]).convert('RGB')
         plt.imshow(img)
         plt.title(f'Cosine similiarity: {cos_similarity[image]:.3f}')
+    plt.savefig(f"/content/Notebooks/cosine_similarity/output/output.png")
+    plt.show()
+    plt.close()
     plt.tight_layout()
 
 
