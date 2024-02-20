@@ -1,5 +1,8 @@
 import cv2
 import os
+import argparse
+
+import yaml
 
 def parse_opt():
         
@@ -46,11 +49,15 @@ def to_frames(DIR_INPUT, DIR_OUTPUT):
         count = count + 1
         if (count > (video_length-1)):
             cap.release()
-            print ("Извлечение фреймов завершено")
+            print ("Извлечение фреймов завершено. Всего \n%d фреймов" % count)
             break
-
-
+    
 def main(args):
+
+    data_configs = None
+    if args['config'] is not None:
+        with open(args['config']) as file:
+            data_configs = yaml.safe_load(file)
 
     # Определение пути до INPUT    
     if args['input'] == None:
