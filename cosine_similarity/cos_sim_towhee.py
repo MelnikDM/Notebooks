@@ -137,6 +137,7 @@ def plot_similar(df, embedding_col, dir_out, query_index, k_neighbors=3):
     img = Image.open(df['img_path'][query_index]).convert('RGB')
     plt.imshow(img)
     plt.title('Изображение из запроса')
+    plt.savefig(f"{dir_out}/req.png")
 
     # Отображение ближайших соседей
     fig = plt.figure(figsize=(20,4))
@@ -183,16 +184,11 @@ def main(args):
     # Препроцессинг изображений
     image_df = flatten_pixels(input_images)
 
-    a = int(input("Введите номер изображения: "))
-    print()
-    b = int(input("Введите количество соседей : "))
-    print()
-
     plot_similar(df=image_df,
                 embedding_col='embedding_tt',
                 dir_out = DIR_OUTPUT,
-                query_index=a,
-                k_neighbors=b)
+                query_index=randint(0, len(image_df)),
+                k_neighbors=3)
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ import os
 from keras.preprocessing import image as kimage
 from keras.applications import MobileNetV2
 from keras.applications.mobilenet import preprocess_input
-from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances, manhattan_distances
+from sklearn.metrics.pairwise import cosine_similarity
 
 import cv2
 import matplotlib.pyplot as plt

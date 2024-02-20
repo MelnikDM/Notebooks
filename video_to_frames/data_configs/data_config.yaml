@@ -1,0 +1,4 @@
+# Images directory 
+DIR_INPUT: '/content/SVO/LA_ObjectDetection/data/Videos/T64_FAB500.mp4'
+DIR_OUTPUT: '/content/output'
+
