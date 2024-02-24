@@ -7,6 +7,8 @@ import numpy as np
 from PIL import Image, ImageChops
 import cv2
 from imutils import paths
+from pathlib import Path
+import shutil
 
 def parse_opt():
         
@@ -90,9 +92,9 @@ def main(args):
         if len(hashedPaths) > 1:
            for p in hashedPaths[1:]:
               print(f'Похожие изображения {p} перемещены в директорию {DIR_OUTPUT}')
-              with open('{DIR_OUTPUT}/results.txt', 'a', encoding='utf-8') as file:
+              with open('/content/output/results.txt', 'a', encoding='utf-8') as file:
                    file.write(f'Дубли перемещены в директорию\n{"-"*50}\n   - {p}\n   - {DIR_OUTPUT}\n\n')
-              os.path.join(DIR_OUTPUT, p)
+              shutil.move(os.path.join(DIR_INPUT, p), DIR_OUTPUT)
               
 if __name__ == '__main__':
     args = parse_opt()
