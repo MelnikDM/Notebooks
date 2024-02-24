@@ -60,7 +60,7 @@ def main(args):
 
      # создаем пустой txt-файл
     start = time.monotonic()
-    dir_path = Path('DIR_OUTPUT')
+    dir_path = Path(DIR_OUTPUT)
     file_name = 'results.txt'
     file_path = dir_path.joinpath(file_name)
 
@@ -92,7 +92,7 @@ def main(args):
         if len(hashedPaths) > 1:
            for p in hashedPaths[1:]: # все дубли, что нашли, сохраняем в отдульную папку
               print(f'Похожие изображения {p} перемещены в директорию {DIR_OUTPUT}')
-              with open(dir_path.joinpath(file_name), 'a', encoding='utf-8') as file:
+              with open(file_path, 'a', encoding='utf-8') as file:
                    file.write(f'Дубли перемещены в директорию\n{"-"*50}\n   - {p}\n   - {DIR_OUTPUT}\n\n')
               shutil.move(os.path.join(DIR_INPUT, p), DIR_OUTPUT)
     print(f'\nВремя работы скрипта: {time.monotonic() - start}')
