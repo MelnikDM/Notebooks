@@ -86,7 +86,7 @@ def main(args):
       else:
           with open (dir_path.joinpath(file_name),'w') as f:  
                f.write("Данный файл содержит информацию о возможных дублях.\n\n")
-               print('File was created.')
+               print('Файл создан')
     else:
         print('Директория не существует. Создайте директорию')
 
