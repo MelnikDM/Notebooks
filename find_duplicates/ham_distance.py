@@ -4,6 +4,7 @@ import time
 import yaml
 
 from PIL import Image, ImageChops
+import cv2
 from pathlib import Path
 import imagehash
 
@@ -39,8 +40,11 @@ def check_pictures(path_img_1, path_img_2):
     img_2 = Image.open(path_img_2)
     
     # проводим изображения к одному размеру
-    img_1.thumbnail((640, 640))
-    img_2.thumbnail((640, 640))
+    img_1 = cv2.cvtColor(path_img_1, cv2.COLOR_BGR2GRAY)
+    img_2 = cv2.cvtColor(path_img_2, cv2.COLOR_BGR2GRAY)
+
+    img_1.thumbnail((400, 300))
+    img_2.thumbnail((400, 300))
 
     image_one_hash = imagehash.whash(img_1)
     image_two_hash = imagehash.whash(img_2)

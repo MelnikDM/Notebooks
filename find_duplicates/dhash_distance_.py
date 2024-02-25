@@ -32,6 +32,19 @@ def parse_opt():
 
 
 def dhash(path_image, hashSize=8):
+    """
+    Данная функция подсчитывает хэш входящего изображения.  
+    Сначала функция переводит изображение в серый цвет, отбрасывая любую информацию о цвете.
+    Далее идет изменение размера до 9×8 пикселей, игнорируя соотношение сторон.
+    После читается разница между пикселями в соседних столбцах (на выходе логические выражения). 
+    И в конце разница конвертируется в хэш.
+
+    :param path_image: путь до изображения.
+    :param hashSize: размер хэша.
+
+    Returns:
+        Хэш изображения, полученный преобразованием логических выражений в 64-битовые.
+    """
     gray = cv2.cvtColor(path_image, cv2.COLOR_BGR2GRAY)
     resized = cv2.resize(gray, (hashSize + 1, hashSize))
     diff = resized[:, 1:] > resized[:, :-1]
@@ -78,7 +91,7 @@ def main(args):
     print("Вычисляем значения хэшей изображений")
     imagePaths = list(paths.list_images(DIR_INPUT))
     hashes = {}
-    # перебираем наши пуи
+    # перебираем наши пути
     for imagePath in imagePaths:
         # загружаем изображение и считаем его хэш
         image = cv2.imread(imagePath)
@@ -90,7 +103,7 @@ def main(args):
     # проходимся по всем хэшам, ищем повторяющиеся
     for (h, hashedPaths) in hashes.items():
         if len(hashedPaths) > 1:
-           for p in hashedPaths[1:]: # все дубли, что нашли, сохраняем в отдульную папку
+           for p in hashedPaths[1:]: # все дубли, что нашли, сохраняем в отдельную папку
               print(f'Похожие изображения {p} перемещены в директорию {DIR_OUTPUT}')
               with open(file_path, 'a', encoding='utf-8') as file:
                    file.write(f'Дубли перемещены в директорию\n{"-"*50}\n   - {p}\n   - {DIR_OUTPUT}\n\n')
